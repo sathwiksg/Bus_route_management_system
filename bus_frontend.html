@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bus.com</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bus.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+
+</head>
+<body>
+    <header>
+        <div class="heading">
+            <h3>Automated Bus Route System</h3>
+        </div>
+        <div class="route1">
+            <ul>
+                <li><h1 id="route1">Route 1</h1></li>
+                <li><p><strong>Current Frequency:</strong> <span id="interval1">15 minutes</span></p></li>
+                <li><p><strong>Crowd Density:</strong> <span id="density1">85%</span></p></li>
+                <li><p><strong>Status:</strong> <span id="status1">High density</span></p></li>
+            </ul>
+            <i class="fas fa-bus-alt"></i>
+        </div>
+        <div class="route2">
+            <ul>
+                <li><h1 id="route2">Route 2</h1></li>
+                <li><p><strong>Current Frequency:</strong> <span id="interval2">15 minutes</span></p></li>
+                <li><p><strong>Crowd Density:</strong> <span id="density2">15%</span></p></li>
+                <li><p><strong>Status:</strong> <span id="status2">Low density</span></p></li>
+            </ul>
+            <i class="fas fa-bus"></i>
+        </div>
+        <div class="route3">
+            <ul>
+                <li><h1 id="route3">Route 3</h1></li>
+                <li><p><strong>Current Frequency:</strong> <span id="interval3">15 minutes</span></p></li>
+                <li><p><strong>Crowd Density:</strong> <span id="density3">40%</span></p></li>
+                <li><p><strong>Status:</strong> <span id="status3">Normal density</span></p></li>
+            </ul>
+            <i class="fas fa-route"></i>
+        </div>
+        <button class="btn-update" onclick="updateBusRoutes()">Update Bus Routes</button>
+        <div class="extra-options">
+            <a href="/analytics" class="option"><i class="fas fa-chart-bar"></i> View Analytics</a>
+            <a href="/settings" class="option"><i class="fas fa-cog"></i> Settings</a>
+            <button class="option" onclick="toggleDarkMode()" id="dark-mode-toggle"><i class="fas fa-moon"></i> Dark Mode</button>
+        </div>
+    </header>
+
+    <script>
+        function updateBusRoutes() {
+            fetch('/update_routes_twice')
+                .then(response => response.json())
+                .then(updates => {
+                    updates.forEach((updateData, index) => {
+                        updateData.forEach(route => {
+                            document.getElementById(`interval${route.route}`).innerText = route.interval;
+                            document.getElementById(`density${route.route}`).innerText = route.density + '%';
+                            document.getElementById(`status${route.route}`).innerText = route.status;
+                        });
+                    });
+                })
+                .catch(error => console.log('Error:', error));
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
